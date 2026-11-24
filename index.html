@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kunz · Photographes à Nyon</title>
+<meta name="description" content="Gestion de projet de l’exposition Kunz, photographes à Nyon">
+<meta name="theme-color" content="#0B0E09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kunz">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Gravur Cond';src:url('fonts/GravurLLTT-CondBold.ttf') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:'Gravur Cond';src:url('fonts/GravurLLTT-CondBlack.ttf') format('truetype');font-weight:900;font-display:swap}
+@font-face{font-family:'Akkurat';src:url('fonts/AkkuratLLTT-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Akkurat';src:url('fonts/AkkuratLLTT-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+:root{
+  --bg:#0B0E09; --card:#151A12; --card2:#1D2419; --line:#232A1E; --sunk:#0F130C;
+  --text:#F3F4EC; --muted:#B9C0AE; --faint:#A3AC98; --soft:#C9CDBE;
+  --accent:#cdce00; --late:#ec6907; --p:#65b32e; --l:#c3bd7a; --d:#cdce00;
+  --display:'Gravur Cond','Arial Narrow',sans-serif;
+  --body:'Akkurat','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.35}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Écran de chargement */
+#splash{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--bg);transition:opacity .35s ease}
+#splash.out{opacity:0;pointer-events:none}
+#splash .photo{flex:1 1 64%;min-height:0;background:#0B0E09 url('img/kunz-photo.jpg') center 42%/cover no-repeat}
+#splash .band{flex:0 0 auto;padding:28px 26px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:18px;color:var(--accent)}
+#splash .k{font-family:var(--display);font-weight:900;font-size:104px;line-height:.8;margin:0}
+#splash .ph{font-family:var(--display);font-weight:700;font-size:46px;line-height:.92;margin:8px 0 0}
+#splash .gp{display:flex;align-items:center;gap:12px;font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+#splash .gp:before{content:"";width:32px;height:3px;background:var(--accent)}
+#splash .bar{height:3px;background:rgba(205,206,0,.22);border-radius:2px;overflow:hidden}
+#splash .bar i{display:block;height:3px;width:0;background:var(--accent);animation:load 1.1s ease forwards}
+@keyframes load{to{width:100%}}
+@media (min-width:760px){#splash{flex-direction:row}#splash .photo{flex:1 1 55%}#splash .band{flex:0 0 420px;justify-content:flex-end;padding:48px}}
+@media (prefers-reduced-motion:reduce){#splash .bar i{animation:none;width:100%}#splash{transition:none}}
+
+/* Barre du haut */
+header{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:calc(12px + env(safe-area-inset-top)) 20px 12px;background:rgba(11,14,9,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--card2)}
+.brand{display:flex;align-items:baseline;gap:10px;color:var(--accent);font-family:var(--display)}
+.brand b{font-weight:900;font-size:32px;line-height:.85}
+.brand span{font-weight:700;font-size:17px;line-height:1}
+nav.tabs{display:flex;gap:4px;padding:4px;background:var(--card);border-radius:24px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{height:40px;padding:0 16px;border:0;border-radius:20px;background:transparent;color:var(--soft);font-weight:700;white-space:nowrap}
+nav.tabs button[aria-current="page"]{background:var(--accent);color:var(--bg)}
+.search{flex:1 1 220px;display:flex;justify-content:flex-end;min-width:0}
+.search label{flex:0 1 340px;min-width:0;height:42px;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--card);border-radius:21px;color:var(--muted)}
+.search input{flex:1;min-width:0;background:transparent;border:0;outline:none;color:var(--text)}
+.search input::placeholder{color:var(--faint)}
+@media (max-width:640px){header{gap:10px 12px;padding-left:16px;padding-right:16px}.brand span{display:none}nav.tabs{order:3;width:100%}nav.tabs button{flex:1;padding:0 8px}.search{flex:1 1 120px}}
+
+/* Contenu */
+main{position:relative;max-width:1120px;margin:0 auto;padding:24px 20px calc(56px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:22px}
+.pagehead small{display:block;color:var(--muted);font-size:14px}
+h1{margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:46px;line-height:.95}
+h2{margin:0;font-family:var(--display);font-weight:700;font-size:26px;line-height:1}
+.group{display:flex;flex-direction:column;gap:8px}
+.grouphead{display:flex;align-items:center;gap:10px;padding:0 2px}
+.badge{min-width:26px;height:26px;padding:0 8px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.card{background:var(--card);border-radius:18px}
+.empty{margin:0;padding:16px 18px;color:var(--muted)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:4px;flex-shrink:0;display:inline-block}
+.check{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:22px;border:1.5px solid #5A6750;background:transparent;color:var(--bg);padding:0}
+.check.on{border:0;background:var(--accent)}
+.scroller{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.scroller::-webkit-scrollbar,nav.tabs::-webkit-scrollbar{display:none}
+
+/* Agenda */
+.countdown{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px;padding:18px 22px;background:var(--accent);color:var(--bg);border-radius:22px}
+.countdown b{font-family:var(--display);font-weight:900;font-size:72px;line-height:.82}
+.countdown span{font-weight:700;font-size:16px}
+.milestone{flex-shrink:0;display:flex;flex-direction:column;gap:2px;padding:10px 14px}
+.milestone strong{font-size:15px;white-space:nowrap}
+.ev{display:flex;align-items:center;gap:14px;padding:12px 12px 12px 16px}
+.ev .date{width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ev .date b{font-family:var(--display);font-weight:700;font-size:28px;line-height:.9}
+.ev .date span{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.ev .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ev .t{font-weight:700;font-size:16px;line-height:1.25}
+.ev .s{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.done .t{color:#8F9886;text-decoration:line-through}
+
+/* Supports */
+.chip{flex-shrink:0;height:38px;padding:0 14px;border:0;border-radius:19px;background:var(--card);color:var(--soft);font-weight:700;font-size:14px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:0 2px;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sup{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 14px 12px 16px}
+.sup.sel{background:var(--line)}
+.sup .open{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:3px;padding:2px 0;border:0;background:transparent;text-align:left}
+.sup .open b{font-size:16px;line-height:1.25}
+.sup .open span{font-size:13px;line-height:1.3;color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{height:36px;display:flex;align-items:center;gap:7px;padding:0 12px;border:0;border-radius:18px;background:var(--sunk);color:var(--text);font-weight:700;font-size:14px;white-space:nowrap}
+.pill.on{background:rgba(205,206,0,.16);color:var(--accent)}
+.pill.none{border:1px dashed #4A5641;background:transparent;color:var(--muted);font-weight:400;font-size:13px;cursor:default}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:20;width:420px;max-width:100%;overflow-y:auto;background:var(--card);border-left:1px solid var(--line);box-shadow:-24px 0 48px rgba(0,0,0,.45);padding:calc(24px + env(safe-area-inset-top)) 22px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:20px}
+.drawer .head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.drawer h2{font-size:30px;line-height:1.02;margin-top:6px}
+.drawer .full{font-size:14px;color:var(--muted);margin-top:6px}
+.close{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:0;border-radius:22px;background:var(--line);padding:0}
+.step{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--sunk);border-radius:16px}
+.step .check{width:32px;height:32px;border-radius:16px}
+.step .row{flex:1;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field b{font-size:16px}
+.scrim{position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.4);border:0;padding:0}
+
+/* Budget */
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{flex:1 1 150px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.stat b{font-family:var(--display);font-weight:900;font-size:34px;line-height:1;white-space:nowrap}
+.stat.hi{background:var(--accent);color:var(--bg)}
+.stat.hi .eyebrow{color:var(--bg)}
+.stat.over{background:var(--late);color:var(--bg)}
+.stat.over .eyebrow{color:var(--bg)}
+.poste{display:flex;flex-direction:column;gap:10px;padding:14px 16px}
+.poste .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.poste .top div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.poste .top .r{align-items:flex-end;flex-shrink:0}
+.meter{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.meter i{display:block;height:6px;border-radius:3px}
+.small{font-size:13px;color:var(--muted)}
+.total{display:flex;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--card2);border-radius:18px;font-weight:700}
+.quote{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 14px;padding:14px 16px}
+.quote .who{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:3px}
+.quote .edit{display:flex;gap:8px;align-items:center}
+.quote input,.quote select{height:40px;border:0;border-radius:20px;background:var(--sunk);color:var(--text);padding:0 14px;font-weight:700}
+.quote input{width:130px;text-align:right}
+.quote select{padding-right:10px}
+
+/* Contacts */
+.contacts{display:flex;flex-wrap:wrap;gap:10px}
+.contact{flex:1 1 300px;display:flex;gap:14px;align-items:center;padding:16px}
+.avatar{width:46px;height:46px;flex-shrink:0;border-radius:23px;color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700}
+.contact .who{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.tag{flex-shrink:0;height:26px;padding:0 10px;display:flex;align-items:center;border-radius:13px;background:var(--line);color:var(--accent);font-size:12px;font-weight:700;white-space:nowrap}
+.note{font-size:13px;color:var(--faint);margin:0}
+</style>
+</head>
+<body>
+<div id="splash" aria-hidden="true">
+  <div class="photo"></div>
+  <div class="band">
+    <div>
+      <p class="k">KUNZ</p>
+      <p class="ph">Photographes<br>à Nyon</p>
+    </div>
+    <div class="gp">Gestion de projet</div>
+    <div class="bar"><i></i></div>
+  </div>
+</div>
+
+<header>
+  <div class="brand"><b>KUNZ</b><span>Photographes à Nyon</span></div>
+  <nav class="tabs" aria-label="Navigation principale">
+    <button type="button" data-tab="agenda">Agenda</button>
+    <button type="button" data-tab="supports">Supports</button>
+    <button type="button" data-tab="budget">Budget</button>
+    <button type="button" data-tab="contacts">Contacts</button>
+  </nav>
+  <div class="search">
+    <label>
+      <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <span class="sr">Rechercher</span>
+      <input id="q" type="search" placeholder="Rechercher" autocomplete="off">
+    </label>
+  </div>
+</header>
+
+<main id="main">
+  <div class="pagehead"><small id="today"></small><h1 id="title">Agenda</h1></div>
+  <div id="view"></div>
+</main>
+<div id="layer"></div>
+
+<script>
+(function () {
+'use strict';
+
+var SUP = [{"id": "s1", "t": "Pages web des 3 musées + agenda nyon.ch", "c": "Web et réseaux", "p": "2026-09-01", "l": "2026-10-23", "d": "2026-10-30", "w": "", "k": "Sites des 3 musées, nyon.ch", "q": "Youb", "f": "Page du projet sur les sites des trois musées et agenda participatif nyon.ch"}, {"id": "s2", "t": "Dossier d’images HD", "c": "Presse et médias", "p": "2026-11-01", "l": "2027-04-30", "d": "2027-05-27", "w": "", "k": "Presse (e-mail)", "q": "Youb + conservation", "f": "Dossier d’images : photos HD, légendes et crédits"}, {"id": "s3", "t": "Film sur le fonds Kunz", "c": "Vidéo et photo", "p": "2026-11-05", "l": "2027-02-15", "d": null, "w": "Catherine Schmutz", "n": "À voir avec Catherine Schmutz", "k": "À définir", "q": "Catherine Schmutz", "f": "Film autour du fonds Kunz"}, {"id": "s4", "t": "Newsletters des musées de Nyon", "c": "Partenaires", "p": "2026-11-23", "l": "2026-11-23", "d": "2026-11-23", "w": "Youb", "k": "Newsletters des musées", "q": "Youb", "f": "Encart Kunz dans les newsletters des musées de Nyon"}, {"id": "s5", "t": "Vidéo Adrien Wagner", "c": "Vidéo et photo", "p": "2026-12-01", "l": "2027-06-05", "d": "2027-06-09", "w": "Adrien Wagner", "k": "Réseaux sociaux, sites web", "q": "Adrien Wagner", "f": "Vidéo Adrien Wagner"}, {"id": "s6", "t": "Coordination Cartolacôte", "c": "Presse et médias", "p": "2027-01-11", "l": "2027-01-29", "d": "2027-04-13", "w": "Cartolacôte", "k": "Cartolacôte", "q": "Cartolacôte", "f": "Coordination de la communication Cartolacôte"}, {"id": "s7", "t": "Relais École des sciences criminelles", "c": "Partenaires", "p": "2027-01-15", "l": "2027-04-23", "d": "2027-05-14", "w": "École des sciences criminelles", "k": "École des sciences criminelles", "q": "École des sciences criminelles", "f": "Relais universitaire : École des sciences criminelles"}, {"id": "s8", "t": "Vidéos pro : teaser et montages", "c": "Vidéo et photo", "p": "2027-01-15", "l": "2027-04-30", "d": "2027-05-04", "w": "", "k": "Réseaux sociaux, sites web", "q": "Adrien Wagner", "f": "Vidéos professionnelles : fonds, teaser et montage"}, {"id": "s9", "t": "Kit partenaires : photos HD et textes", "c": "Partenaires", "p": "2027-02-01", "l": "2027-02-19", "d": "2027-02-22", "w": "", "k": "Partenaires (e-mail)", "q": "Youb", "f": "Kit photos HD et textes pour la communication (partenaires et autres)"}, {"id": "s10", "t": "Visuels réseaux sociaux", "c": "Web et réseaux", "p": "2027-02-01", "l": "2027-02-26", "d": "2027-03-03", "w": "Youb", "k": "Instagram, Facebook", "q": "Youb", "f": "Déclinaisons graphiques pour les réseaux sociaux"}, {"id": "s11", "t": "Communiqué et formulaire Cartolacôte", "c": "Presse et médias", "p": "2027-02-01", "l": "2027-03-19", "d": "2027-04-13", "w": "Cartolacôte", "k": "Presse, réseaux sociaux", "q": "Youb + Cartolacôte", "f": "Communiqué Cartolacôte et formulaire participatif"}, {"id": "s12", "t": "Affiche F4 · hors Nyon", "c": "Affichage et print", "p": "2027-03-01", "l": "2027-04-16", "d": "2027-05-03", "w": "Goldbach (via Francine)", "k": "Affichage Genève, Lausanne", "q": "Goldbach (via Francine)", "f": "Affiche F4 · Genève, Lausanne et hors Nyon"}, {"id": "s13", "t": "Affiche F12 · hors Nyon (option)", "c": "Affichage et print", "p": "2027-03-01", "l": "2027-04-16", "d": "2027-05-03", "w": "Goldbach (via Francine)", "k": "Affichage Genève, Lausanne", "q": "Goldbach (via Francine)", "f": "Affiche F12, si retenue · hors Nyon"}, {"id": "s14", "t": "Reels et vidéos courtes", "c": "Web et réseaux", "p": "2027-03-01", "l": "2027-04-23", "d": "2027-04-27", "w": "", "k": "Instagram, Facebook", "q": "Youb", "f": "Reels et vidéos courtes pour les réseaux sociaux"}, {"id": "s15", "t": "Programme PDF", "c": "Web et réseaux", "p": "2027-03-01", "l": "2027-04-30", "d": "2027-05-03", "w": "", "k": "Sites web, e-mail", "q": "Youb", "f": "Programme général PDF : expositions et rendez-vous"}, {"id": "s16", "t": "Affiche F4 · Nyon", "c": "Affichage et print", "p": "2027-03-01", "l": "2027-05-14", "d": "2027-05-31", "w": "Goldbach (via Francine)", "k": "Affichage Nyon", "q": "Goldbach (via Francine)", "f": "Affiche F4 · rue à Nyon"}, {"id": "s17", "t": "Affiche F12 · Nyon (option)", "c": "Affichage et print", "p": "2027-03-01", "l": "2027-05-14", "d": "2027-05-31", "w": "Goldbach (via Francine)", "k": "Affichage Nyon", "q": "Goldbach (via Francine)", "f": "Affiche F12, si retenue · rue à Nyon"}, {"id": "s18", "t": "Créateurs de contenus (option)", "c": "Web et réseaux", "p": "2027-03-03", "l": "2027-04-03", "d": "2027-05-14", "w": "", "k": "Comptes des créateurs", "q": "Créateurs, si retenus", "f": "Publications de créateurs de contenus, si retenues"}, {"id": "s19", "t": "Newsletters des institutions partenaires", "c": "Partenaires", "p": "2027-04-12", "l": "2027-04-23", "d": "2027-05-03", "w": "", "k": "Newsletters des institutions", "q": "Institutions partenaires", "f": "Encart Kunz dans les newsletters des autres institutions"}, {"id": "s20", "t": "Journal communal", "c": "Partenaires", "p": "2027-04-12", "l": "2027-04-23", "d": "2027-05-20", "w": "", "k": "Journal communal", "q": "Ville de Nyon", "f": "Encart dans le Journal communal"}, {"id": "s21", "t": "Annonces médias", "c": "Presse et médias", "p": "2027-04-12", "l": "2027-05-03", "d": "2027-05-27", "w": "", "k": "Journaux, radios", "q": "Régies", "f": "Encarts dans les autres médias retenus"}, {"id": "s22", "t": "Flyer A5", "c": "Affichage et print", "p": "2027-04-12", "l": "2027-05-05", "d": "2027-05-10", "w": "", "k": "Commerces, lieux culturels", "q": "Youb + imprimeur", "f": "Flyer grand public A5 : lieux, dates et programme"}, {"id": "s23", "t": "Affiche A3 commerces", "c": "Affichage et print", "p": "2027-04-12", "l": "2027-05-05", "d": "2027-05-13", "w": "", "k": "Commerces, partenaires", "q": "Youb + imprimeur", "f": "Affiche A3 pour commerces et partenaires"}, {"id": "s24", "t": "Interviews vidéo", "c": "Vidéo et photo", "p": "2027-04-12", "l": "2027-05-05", "d": "2027-05-13", "w": "", "k": "Réseaux sociaux", "q": "Youb", "f": "Interviews vidéo des personnes du projet"}, {"id": "s25", "t": "Fichier d’adresses e-mail", "c": "Invitations", "p": "2027-04-12", "l": "2027-05-10", "d": null, "w": "Francine", "k": "Interne", "q": "Francine + Youb", "f": "Mise à jour des adresses courriel, dont liste Francine"}, {"id": "s26", "t": "Totems d’accueil", "c": "Affichage et print", "p": "2027-04-12", "l": "2027-05-26", "d": "2027-05-28", "w": "Luc Renaud", "k": "Accueil des institutions", "q": "Luc Renaud", "f": "Totems d’accueil dans les institutions"}, {"id": "s27", "t": "Signalétique (option)", "c": "Affichage et print", "p": "2027-04-12", "l": "2027-05-26", "d": "2027-05-31", "w": "Luc Renaud", "k": "Rues de Nyon", "q": "Luc Renaud", "f": "Signalétique d’orientation, si nécessaire"}, {"id": "s28", "t": "Newsletter de la Ville", "c": "Partenaires", "p": "2027-04-19", "l": "2027-04-30", "d": "2027-05-13", "w": "", "k": "Newsletter de la Ville", "q": "Ville de Nyon", "f": "Encart dans la newsletter de la Ville"}, {"id": "s29", "t": "Envoi presse", "c": "Presse et médias", "p": "2027-04-26", "l": "2027-05-14", "d": "2027-05-20", "w": "", "k": "Presse (e-mail)", "q": "Youb", "f": "Envoi presse : communiqué, dossier et images"}, {"id": "s30", "t": "Annonce La Côte (gratuite)", "c": "Presse et médias", "p": "2027-04-26", "l": "2027-05-21", "d": "2027-05-27", "w": "La Côte", "k": "La Côte", "q": "La Côte", "f": "Encart publicitaire dans La Côte (gratuit)"}, {"id": "s31", "t": "Invitation par e-mail", "c": "Invitations", "p": "2027-05-03", "l": "2027-05-11", "d": "2027-05-18", "w": "", "k": "E-mail", "q": "Youb", "f": "Invitation au vernissage par courriel"}, {"id": "s32", "t": "Carton d’invitation", "c": "Invitations", "p": "2027-05-03", "l": "2027-05-14", "d": "2027-05-18", "w": "", "k": "Courrier postal", "q": "Youb + imprimeur", "f": "Carton d’invitation imprimé au vernissage"}, {"id": "s33", "t": "Dossier de presse", "c": "Presse et médias", "p": "2027-05-03", "l": "2027-05-21", "d": "2027-05-27", "w": "", "k": "Presse, site du Château", "q": "Youb", "f": "Dossier de presse PDF"}, {"id": "s34", "t": "Photos du vernissage", "c": "Vidéo et photo", "p": "2027-06-03", "l": "2027-06-04", "d": "2027-06-04", "w": "", "k": "Réseaux sociaux, presse", "q": "Photographe", "f": "Photographies du vernissage"}, {"id": "s35", "t": "Aftermovie", "c": "Vidéo et photo", "p": "2027-06-03", "l": "2027-06-09", "d": "2027-06-10", "w": "", "k": "Réseaux sociaux", "q": "Vidéaste", "f": "Aftermovie du vernissage"}, {"id": "s36", "t": "Photos de l’exposition", "c": "Vidéo et photo", "p": "2027-06-04", "l": "2027-06-09", "d": "2027-06-10", "w": "", "k": "Presse, sites web", "q": "Photographe", "f": "Photographies des expositions"}, {"id": "s37", "t": "Flyer FOCALE", "c": "Affichage et print", "p": null, "l": null, "d": null, "w": "FOCALE et Catherine", "n": "À voir avec Catherine et FOCALE", "k": "FOCALE", "q": "FOCALE + Catherine Schmutz", "f": "Flyer FOCALE, avec droit de regard de la Culture"}];
+var VERNISSAGE = '2027-06-03';
+var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+var JOURS = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+var STEPS = [['p', 'Lancement', '#65b32e'], ['l', 'Délai partenaire', '#c3bd7a'], ['d', 'Diffusion', '#cdce00']];
+var CATS = ['Affichage et print', 'Web et réseaux', 'Partenaires', 'Presse et médias', 'Vidéo et photo', 'Invitations', 'Tous'];
+var POSTES = [
+  ['Graphisme', 'Affiche F4, carton d’invitation, carton rendez-vous, annonces', 10000],
+  ['Impression', 'Affiche F4, carton d’invitation, carton rendez-vous', 14000],
+  ['Web et réseaux sociaux', '', 9000],
+  ['Affichage', 'Nyon, Lausanne, Genève', 12000],
+  ['Annonces médias', 'Journaux, radios', 10000],
+  ['Photographie de l’exposition', '', 1000],
+  ['Vidéos promotionnelles', '', 13000]
+];
+var QUOTES = [
+  { id: 'q1', who: 'Graphiste (à choisir)', what: 'Affiche F4, cartons, annonces', poste: 'Graphisme', status: 'À demander', match: /Carton d/ },
+  { id: 'q2', who: 'Imprimeur (à choisir)', what: 'Affiches, cartons, flyers', poste: 'Impression', status: 'À demander', match: /Flyer A5|Affiche A3/ },
+  { id: 'q3', who: 'Goldbach', what: 'Affichage F4 et F12', poste: 'Affichage', status: 'À demander', match: /Affiche F/ },
+  { id: 'q4', who: 'La Côte', what: 'Annonce', poste: 'Annonces médias', status: 'Gratuit', amount: 0, match: /La Côte/ },
+  { id: 'q5', who: 'Photographe (à choisir)', what: 'Photos de l’exposition', poste: 'Photographie de l’exposition', status: 'À demander', match: /Photos de l’exposition/ },
+  { id: 'q6', who: 'Adrien Wagner', what: 'Vidéo et montages', poste: 'Vidéos promotionnelles', status: 'À demander', match: /Vidéo Adrien Wagner|Vidéos pro/ },
+  { id: 'q7', who: 'Luc Renaud', what: 'Totems et signalétique', poste: 'À attribuer', status: 'À demander', match: /Totems|Signalétique/ }
+];
+var STATUSES = ['À demander', 'Demandé', 'Reçu', 'Accepté', 'Facturé', 'Payé', 'Gratuit'];
+var PLANNED = ['Reçu', 'Accepté', 'Facturé', 'Payé'];
+var CONTACTS = [
+  ['Goldbach', 'Afficheur, F4 et F12', 'Goldbach', '#a5c72b'],
+  ['Adrien Wagner', 'Vidéaste', 'Adrien Wagner', '#a5c27e'],
+  ['Luc Renaud', 'Totems et signalétique', 'Luc Renaud', '#acaa00'],
+  ['Cartolacôte', 'Projet participatif', 'Cartolacôte', '#65b32e'],
+  ['École des sciences criminelles', 'Relais universitaire', 'École', '#a5c27e'],
+  ['La Côte', 'Annonce', 'La Côte', '#c3bd7a'],
+  ['FOCALE', 'Flyer FOCALE', 'FOCALE', '#829479'],
+  ['Imprimeur', 'À choisir · affiches, cartons, flyers', 'imprimeur', '#cdce00'],
+  ['Graphiste', 'À choisir · affiche F4, cartons, annonces', 'Graphiste', '#a5c72b'],
+  ['Photographe', 'À choisir · photos de l’exposition', 'Photographe', '#c3bd7a']
+];
+
+// ---------- état, enregistré sur cet appareil ----------
+var KEY = 'kunz-gestion-v1';
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+var state = { tab: 'agenda', cat: 'Tous', sel: null, q: '', done: saved.done || {}, quotes: saved.quotes || {} };
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify({ done: state.done, quotes: state.quotes })); } catch (e) {}
+}
+
+// ---------- outils ----------
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function toDate(iso) { return new Date(iso + 'T12:00:00'); }
+function fmt(iso) { var d = toDate(iso); return JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()]; }
+function fmtS(iso) { var d = toDate(iso); return d.getDate() + ' ' + MOIS[d.getMonth()]; }
+function chf(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' CHF'; }
+function isDone(id, k) { return !!state.done[id + ':' + k]; }
+function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function hit() { var q = norm(state.q).trim(); if (!q) return true; for (var i = 0; i < arguments.length; i++) if (norm(arguments[i]).indexOf(q) >= 0) return true; return false; }
+var CHECK = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+var CHECK_S = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function quoteState(q) {
+  var s = state.quotes[q.id] || {};
+  return { status: s.status || q.status, amount: s.amount != null ? s.amount : (q.amount != null ? q.amount : null) };
+}
+function today0() { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+
+// ---------- Agenda ----------
+function renderAgenda() {
+  var t0 = today0(), t7 = new Date(t0.getTime() + 7 * 86400000);
+  var map = {};
+  SUP.forEach(function (s) {
+    STEPS.forEach(function (st) {
+      if (!s[st[0]]) return;
+      var key = s.id + '@' + s[st[0]];
+      if (!map[key]) map[key] = { s: s, iso: s[st[0]], keys: [], labels: [] };
+      map[key].keys.push(st[0]); map[key].labels.push(st[1]);
+    });
+  });
+  var evs = Object.keys(map).map(function (k) { return map[k]; })
+    .filter(function (e) { return hit(e.s.t, e.s.f, e.s.q, e.s.k); })
+    .sort(function (a, b) { return a.iso < b.iso ? -1 : a.iso > b.iso ? 1 : 0; });
+  function allDone(e) { return e.keys.every(function (k) { return isDone(e.s.id, k); }); }
+  var late = evs.filter(function (e) { return toDate(e.iso) < t0 && !allDone(e); });
+  var week = evs.filter(function (e) { var d = toDate(e.iso); return d >= t0 && d < t7; });
+  var next = evs.filter(function (e) { return toDate(e.iso) >= t7; });
+  if (!state.q) next = next.slice(0, 8);
+  function card(e, isLate) {
+    var dn = allDone(e), d = toDate(e.iso);
+    var stepTxt = e.labels.length === 3 ? 'Lancement, délai et diffusion' : e.labels.join(' et ');
+    var col = STEPS.filter(function (x) { return x[0] === e.keys[e.keys.length - 1]; })[0][2];
+    return '<div class="card ev' + (dn ? ' done' : '') + '">' +
+      '<div class="date"><b style="color:' + (isLate ? 'var(--late)' : 'var(--text)') + '">' + d.getDate() + '</b><span>' + MOIS[d.getMonth()] + '</span></div>' +
+      '<div class="txt"><span class="t">' + esc(e.s.t) + '</span><span class="s"><i class="dot" style="background:' + col + '"></i>' + esc(stepTxt) + ' · ' + esc(e.s.q) + '</span></div>' +
+      '<button type="button" class="check' + (dn ? ' on' : '') + '" data-ev="' + esc(e.s.id + '|' + e.keys.join(',')) + '" aria-pressed="' + dn + '" aria-label="' + esc((dn ? 'Marquer comme à faire : ' : 'Marquer comme fait : ') + e.s.t) + '">' + (dn ? CHECK : '') + '</button></div>';
+  }
+  function group(name, list, bg, fg, isLate) {
+    return '<section class="group"><div class="grouphead"><h2>' + name + '</h2><span class="badge" style="background:' + bg + ';color:' + fg + '">' + list.length + '</span></div>' +
+      (list.length ? list.map(function (e) { return card(e, isLate); }).join('') : '<p class="card empty">Rien à signaler.</p>') + '</section>';
+  }
+  var days = Math.max(0, Math.round((toDate(VERNISSAGE) - t0) / 86400000) );
+  var ms = [['Partenaires', '2027-02-22'], ['Web et réseaux', '2027-03-03'], ['Affichage hors Nyon', '2027-05-03'], ['Presse', '2027-05-20'], ['Affichage Nyon', '2027-05-31'], ['Vernissage', '2027-06-03']];
+  return '<div style="display:flex;flex-direction:column;gap:26px">' +
+    (state.q ? '' :
+      '<section class="countdown" aria-label="Compte à rebours"><div style="display:flex;align-items:baseline;gap:12px"><b>' + days + '</b><span>jours avant<br>le vernissage</span></div><span>jeudi 3 juin 2027</span></section>' +
+      '<div class="scroller">' + ms.map(function (m) { return '<div class="card milestone"><span class="eyebrow">' + m[0] + '</span><strong' + (m[0] === 'Vernissage' ? ' style="color:var(--accent)"' : '') + '>' + fmt(m[1]) + '</strong></div>'; }).join('') + '</div>') +
+    group('En retard', late, 'var(--late)', 'var(--bg)', true) +
+    group('Cette semaine', week, 'var(--accent)', 'var(--bg)', false) +
+    group(state.q ? 'À venir' : 'Prochainement', next, 'var(--line)', 'var(--soft)', false) +
+    '</div>';
+}
+
+// ---------- Supports ----------
+function renderSupports() {
+  var chips = CATS.map(function (c) {
+    var n = c === 'Tous' ? SUP.length : SUP.filter(function (s) { return s.c === c; }).length;
+    return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === state.cat) + '">' + esc(c) + ' · ' + n + '</button>';
+  }).join('');
+  var rows = SUP.filter(function (s) { return (state.cat === 'Tous' || s.c === state.cat) && hit(s.t, s.f, s.q, s.k, s.c); });
+  var list = rows.map(function (s) {
+    var pills = STEPS.map(function (st) {
+      var k = st[0];
+      if (!s[k]) return '<span class="pill none"><i class="dot" style="background:' + st[2] + '"></i>' + (k === 'd' && s.n ? 'À voir' : 'Sans date') + '</span>';
+      var dn = isDone(s.id, k);
+      return '<button type="button" class="pill' + (dn ? ' on' : '') + '" data-step="' + s.id + ':' + k + '" aria-pressed="' + dn + '" aria-label="' + esc(st[1] + ' ' + fmt(s[k]) + (dn ? ', fait' : ', à faire') + ' : ' + s.t) + '">' +
+        (dn ? CHECK_S : '<i class="dot" style="background:' + st[2] + '"></i>') + fmtS(s[k]) + '</button>';
+    }).join('');
+    return '<div class="card sup' + (s.id === state.sel ? ' sel' : '') + '"><button type="button" class="open" data-open="' + s.id + '" aria-label="' + esc('Ouvrir la fiche : ' + s.t) + '"><b>' + esc(s.t) + '</b><span>' + esc(s.k) + ' · ' + esc(s.q) + '</span></button><div class="pills">' + pills + '</div></div>';
+  }).join('');
+  return '<div style="display:flex;flex-direction:column;gap:14px">' +
+    '<div class="scroller" role="group" aria-label="Catégories">' + chips + '</div>' +
+    '<div class="legend"><span><i class="dot" style="background:var(--p)"></i>Lancement</span><span><i class="dot" style="background:var(--l)"></i>Délai donné au partenaire</span><span><i class="dot" style="background:var(--d)"></i>Date de diffusion</span></div>' +
+    (list || '<p class="card empty">Aucun support ne correspond.</p>') + '</div>';
+}
+function renderDrawer() {
+  var s = SUP.filter(function (x) { return x.id === state.sel; })[0];
+  if (!s || state.tab !== 'supports') return '';
+  var q = QUOTES.filter(function (x) { return x.match.test(s.t); })[0];
+  var qs = q ? quoteState(q) : null;
+  var steps = STEPS.map(function (st) {
+    var k = st[0], dn = s[k] ? isDone(s.id, k) : false;
+    return '<div class="step">' + (s[k] ? '<button type="button" class="check' + (dn ? ' on' : '') + '" data-step="' + s.id + ':' + k + '" aria-pressed="' + dn + '" aria-label="' + esc((dn ? 'Marquer comme à faire : ' : 'Marquer comme fait : ') + st[1]) + '">' + (dn ? CHECK_S : '') + '</button>' : '') +
+      '<div class="row"><span class="eyebrow" style="color:' + st[2] + '">' + st[1] + '</span><b>' + (s[k] ? fmt(s[k]) : esc(k === 'd' && s.n ? s.n : 'Sans date')) + '</b></div></div>';
+  }).join('');
+  return '<button type="button" class="scrim" data-close="1" aria-label="Fermer la fiche"></button>' +
+    '<aside class="drawer" role="dialog" aria-modal="true" aria-label="' + esc('Fiche : ' + s.t) + '">' +
+    '<div class="head"><div><span class="eyebrow">' + esc(s.c) + '</span><h2>' + esc(s.t) + '</h2>' + (s.f !== s.t ? '<p class="full">' + esc(s.f) + '</p>' : '') + '</div>' +
+    '<button type="button" class="close" data-close="1" aria-label="Fermer la fiche"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>' +
+    '<div style="display:flex;flex-direction:column;gap:8px">' + steps + '</div>' +
+    '<div class="field"><span class="eyebrow">Support de diffusion</span><b style="font-weight:400">' + esc(s.k) + '</b></div>' +
+    '<div class="field"><span class="eyebrow">Qui s’en charge</span><b>' + esc(s.q) + '</b></div>' +
+    '<div class="field"><span class="eyebrow">Devis</span><b style="font-weight:400">' + (q ? esc(q.who + ' · ' + (qs.amount != null ? chf(qs.amount) : 'montant à saisir') + ' · ' + qs.status) : 'Aucun devis') + '</b></div>' +
+    '</aside>';
+}
+
+// ---------- Budget ----------
+function renderBudget() {
+  function sumFor(poste, statuses) {
+    return QUOTES.filter(function (q) { return q.poste === poste; }).reduce(function (t, q) {
+      var s = quoteState(q); return t + (statuses.indexOf(s.status) >= 0 && s.amount ? Number(s.amount) : 0);
+    }, 0);
+  }
+  var total = POSTES.reduce(function (t, p) { return t + p[2]; }, 0);
+  var planned = POSTES.reduce(function (t, p) { return t + sumFor(p[0], PLANNED); }, 0);
+  var paid = POSTES.reduce(function (t, p) { return t + sumFor(p[0], ['Payé']); }, 0);
+  var left = total - planned;
+  var postes = POSTES.filter(function (p) { return hit(p[0], p[1]); }).map(function (p) {
+    var pl = sumFor(p[0], PLANNED), pd = sumFor(p[0], ['Payé']), r = p[2] - pl, pct = Math.min(100, Math.round(pl / p[2] * 100));
+    var col = r < 0 ? 'var(--late)' : 'var(--accent)';
+    return '<div class="card poste"><div class="top"><div><b>' + esc(p[0]) + '</b>' + (p[1] ? '<span class="small">' + esc(p[1]) + '</span>' : '') + '</div>' +
+      '<div class="r"><b style="color:' + col + ';white-space:nowrap">' + chf(r) + '</b><span class="small" style="white-space:nowrap">reste sur ' + chf(p[2]) + '</span></div></div>' +
+      '<div class="meter" role="img" aria-label="' + pct + ' % du poste prévu"><i style="width:' + pct + '%;background:' + col + '"></i></div>' +
+      '<span class="small">Prévu ' + chf(pl) + ' · Payé ' + chf(pd) + '</span></div>';
+  }).join('');
+  var quotes = QUOTES.filter(function (q) { return hit(q.who, q.what, q.poste); }).map(function (q) {
+    var s = quoteState(q);
+    return '<div class="card quote"><div class="who"><b>' + esc(q.who) + '</b><span class="small">' + esc(q.what) + ' · ' + esc(q.poste) + '</span></div>' +
+      '<div class="edit"><label><span class="sr">Montant en CHF, ' + esc(q.who) + '</span><input type="number" inputmode="decimal" min="0" step="50" placeholder="Montant" data-amount="' + q.id + '" value="' + (s.amount != null ? esc(s.amount) : '') + '"></label>' +
+      '<label><span class="sr">Statut, ' + esc(q.who) + '</span><select data-status="' + q.id + '">' + STATUSES.map(function (st) { return '<option' + (st === s.status ? ' selected' : '') + '>' + st + '</option>'; }).join('') + '</select></label></div></div>';
+  }).join('');
+  return '<div style="display:flex;flex-direction:column;gap:22px">' +
+    '<div class="stats"><div class="card stat"><span class="eyebrow">Budget</span><b>' + chf(total) + '</b></div>' +
+    '<div class="card stat"><span class="eyebrow">Prévu</span><b>' + chf(planned) + '</b></div>' +
+    '<div class="card stat"><span class="eyebrow">Payé</span><b>' + chf(paid) + '</b></div>' +
+    '<div class="card stat ' + (left < 0 ? 'over' : 'hi') + '"><span class="eyebrow">Reste</span><b>' + chf(left) + '</b></div></div>' +
+    '<section class="group"><h2>Postes</h2>' + postes + '<div class="total"><span>Total intermédiaire</span><span>' + chf(total) + '</span></div></section>' +
+    '<section class="group"><h2>Devis</h2><p class="note">Saisis le montant et le statut de chaque devis : le prévu et le reste se calculent seuls. « Prévu » compte les devis reçus, acceptés, facturés et payés.</p>' + quotes + '</section></div>';
+}
+
+// ---------- Contacts ----------
+function renderContacts() {
+  var list = CONTACTS.filter(function (c) { return hit(c[0], c[1]); }).map(function (c) {
+    var n = SUP.filter(function (x) { return (x.q + ' ' + x.w).indexOf(c[2]) >= 0; }).length;
+    var parts = c[0].split(' ').filter(function (w) { return /^[A-ZÉÈ]/.test(w); });
+    var ini = (parts[0] || c[0])[0] + (parts[1] ? parts[1][0] : '');
+    return '<div class="card contact"><span class="avatar" aria-hidden="true" style="background:' + c[3] + '">' + esc(ini) + '</span>' +
+      '<div class="who"><b>' + esc(c[0]) + '</b><span class="small">' + esc(c[1]) + '</span></div>' +
+      '<span class="tag">' + (n === 0 ? 'Aucun support' : n + (n > 1 ? ' supports' : ' support')) + '</span></div>';
+  }).join('');
+  return '<div class="contacts">' + (list || '<p class="card empty">Aucun contact ne correspond.</p>') + '</div>';
+}
+
+// ---------- rendu ----------
+var TITLES = { agenda: 'Agenda', supports: 'Supports', budget: 'Budget', contacts: 'Contacts' };
+function render() {
+  document.querySelectorAll('nav.tabs button').forEach(function (b) {
+    if (b.getAttribute('data-tab') === state.tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  document.getElementById('title').textContent = TITLES[state.tab];
+  var n = new Date();
+  document.getElementById('today').textContent = JOURS[n.getDay()] + ' ' + n.getDate() + ' ' + MOIS[n.getMonth()] + ' ' + n.getFullYear();
+  var v = state.tab === 'agenda' ? renderAgenda() : state.tab === 'supports' ? renderSupports() : state.tab === 'budget' ? renderBudget() : renderContacts();
+  document.getElementById('view').innerHTML = v;
+  document.getElementById('layer').innerHTML = renderDrawer();
+}
+
+// ---------- interactions ----------
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button');
+  if (!b) return;
+  if (b.hasAttribute('data-tab')) { state.tab = b.getAttribute('data-tab'); state.sel = null; render(); window.scrollTo(0, 0); return; }
+  if (b.hasAttribute('data-cat')) { state.cat = b.getAttribute('data-cat'); render(); return; }
+  if (b.hasAttribute('data-open')) { state.sel = b.getAttribute('data-open'); render(); var c = document.querySelector('.drawer .close'); if (c) c.focus(); return; }
+  if (b.hasAttribute('data-close')) { var id = state.sel; state.sel = null; render(); var o = document.querySelector('[data-open="' + id + '"]'); if (o) o.focus(); return; }
+  if (b.hasAttribute('data-step')) { var k = b.getAttribute('data-step'); state.done[k] = !state.done[k]; save(); render(); var again = document.querySelector('.drawer [data-step="' + k + '"]') || document.querySelector('[data-step="' + k + '"]'); if (again) again.focus(); return; }
+  if (b.hasAttribute('data-ev')) {
+    var parts = b.getAttribute('data-ev').split('|'), keys = parts[1].split(',');
+    var all = keys.every(function (x) { return state.done[parts[0] + ':' + x]; });
+    keys.forEach(function (x) { state.done[parts[0] + ':' + x] = !all; });
+    save(); render(); return;
+  }
+});
+document.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t.hasAttribute('data-status')) { var id = t.getAttribute('data-status'); state.quotes[id] = Object.assign({}, state.quotes[id], { status: t.value }); save(); render(); }
+  if (t.hasAttribute('data-amount')) { var id2 = t.getAttribute('data-amount'); var val = t.value === '' ? null : Math.max(0, Number(t.value)); state.quotes[id2] = Object.assign({}, state.quotes[id2], { amount: val }); save(); render(); }
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && state.sel) { state.sel = null; render(); } });
+document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; render(); });
+
+render();
+
+// écran de chargement : une seconde au premier affichage
+var splash = document.getElementById('splash');
+setTimeout(function () { splash.classList.add('out'); setTimeout(function () { splash.remove(); }, 400); }, 1150);
+
+// fonctionnement hors ligne une fois installée (sauf dans un aperçu intégré)
+if ('serviceWorker' in navigator && location.protocol === 'https:' && window.top === window.self) {
+  try { navigator.serviceWorker.register('sw.js'); } catch (e) {}
+}
+})();
+</script>
+</body>
+</html>
