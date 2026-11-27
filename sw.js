@@ -1,11 +1,10 @@
 // Kunz · fonctionnement hors ligne
 // Change le numéro de version à chaque mise à jour des polices ou des images.
-const CACHE = 'kunz-v1';
+const CACHE = 'kunz-v5';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './img/kunz-photo.jpg', './img/icon-192.png', './img/icon-512.png', './img/apple-touch-icon.png',
-  './fonts/GravurLLTT-CondBold.ttf', './fonts/GravurLLTT-CondBlack.ttf',
-  './fonts/AkkuratLLTT-Regular.ttf', './fonts/AkkuratLLTT-Bold.ttf'
+  './fonts/UnitWeb-Regular.woff2', './fonts/UnitWeb-Bold.woff2'
 ];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
